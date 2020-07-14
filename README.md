@@ -1,2 +1,2 @@
 # simple-client
-Cassandra simple client
+Cassandra alpakka based client
