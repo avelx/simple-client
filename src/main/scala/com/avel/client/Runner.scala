@@ -5,7 +5,6 @@ import akka.stream.alpakka.cassandra.{CassandraSessionSettings, CassandraWriteSe
 import akka.stream.alpakka.cassandra.scaladsl.{CassandraFlow, CassandraSession, CassandraSessionRegistry}
 import akka.stream.scaladsl.{Sink, Source}
 import com.datastax.oss.driver.api.core.cql.{BoundStatement, PreparedStatement}
-import scala.util.{Failure, Success}
 import java.util.UUID.randomUUID
 
 object Runner {
@@ -26,7 +25,6 @@ object Runner {
     val statementBinder: (User, PreparedStatement) => BoundStatement =
       (user, preparedStatement) => preparedStatement.bind( user.userid, user.username)
 
-
     val written: Future[Seq[User]] = Source(users)
       .via(
         CassandraFlow.create(CassandraWriteSettings.defaults,
@@ -34,11 +32,6 @@ object Runner {
           statementBinder)
       )
       .runWith(Sink.seq)
-
-//    written onComplete {
-//      case Success(v) => println(v)
-//      case Failure(ex) => println(ex)
-//    }
 
     val version: Future[Seq[User]] =
       cassandraSession
@@ -50,13 +43,7 @@ object Runner {
       w <- written
       if w.length > 0
       r <- version
-    } yield println(r mkString("\n"))
-
-
-//    version onComplete {
-//      case Success(v) => println(v .mkString("\n"))
-//      case Failure(ex) => println(ex)
-//    }
+    } yield println(r mkString "\n" )
 
     Thread.sleep(3000)
 
