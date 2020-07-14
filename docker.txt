@@ -1,0 +1,5 @@
+// Start cassandra container as demon
+docker run --name some-cassandra --network some-network -p 127.0.0.1:9042:9042 -p 127.0.0.1:9160:9160  -d cassandra
+
+// CQL cli
+docker run -it --network some-network --rm cassandra cqlsh some-cassandra
